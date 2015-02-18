@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [ ! -f /etc/ssh/sshd_config ]; then
+    # Regenerate ssh key per container
+    dpkg-reconfigure openssh-server
+fi
+
+chown nexus /nexus
+
+# start services
+supervisord
