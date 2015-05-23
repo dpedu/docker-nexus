@@ -14,4 +14,10 @@ server {
         autoindex on;
         try_files $uri $uri/ =404;
     }
+    location /cgi-bin/ {
+        gzip off;
+        fastcgi_pass  unix:/tmp/fcgiwrap.socket;
+        include /etc/nginx/fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME  /nexus$fastcgi_script_name;
+    }
 }
