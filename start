@@ -1,14 +1,12 @@
 #!/bin/bash
 
-if [ ! -f /etc/ssh/sshd_config ]; then
-    # Regenerate ssh key per container
-    dpkg-reconfigure openssh-server
-fi
-
-chown nexus /nexus
+# run everything in start.d
+find /start.d -type f -executable -exec {} \;
 
 # Cleanly kill supervisor when container is stopped
 trap 'kill $(jobs -p)' EXIT
+
+chown nexus /nexus
 
 # start services
 supervisord
