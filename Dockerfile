@@ -2,28 +2,33 @@ FROM ubuntu:trusty
 MAINTAINER Dave P
 
 # Create nexus user
-RUN useradd --create-home nexus ; \
-    echo "nexus:nexus" | chpasswd
+RUN useradd --create-home nexus && \
+    echo "nexus:nexus" | chpasswd && \
+    apt-get update && \
+    apt-get install -y nginx-light fcgiwrap supervisor openssh-server cron && \
+    mkdir /start.d /nexus /var/run/sshd && \
+    chown nexus /nexus && \
+    cp /usr/share/doc/fcgiwrap/examples/nginx.conf /etc/nginx/fcgiwrap.conf
 
-# Install nginx
-RUN apt-get update ;\
-    apt-get install -y nginx-light fcgiwrap supervisor openssh-server cron ;\
-    mkdir /start.d /nexus /var/run/sshd ;\
-    chown nexus /nexus
-
-# Configure nginx
-RUN echo "daemon off;" >> /etc/nginx/nginx.conf ; cp /usr/share/doc/fcgiwrap/examples/nginx.conf /etc/nginx/fcgiwrap.conf
-
+# Supervisor confs
 ADD supervisor.conf /etc/supervisor/conf.d/supervisor.conf
-ADD nginx.conf /etc/supervisor/conf.d/nginx.conf
-ADD fcgiwrap.conf /etc/supervisor/conf.d/fcgiwrap.conf
-ADD sshd.conf /etc/supervisor/conf.d/sshd.conf
-ADD cron.conf /etc/supervisor/conf.d/cron.conf
-ADD default /etc/nginx/sites-available/default
+ADD supervisor-nginx.conf /etc/supervisor/conf.d/nginx.conf
+ADD supervisor-fcgiwrap.conf /etc/supervisor/conf.d/fcgiwrap.conf
+ADD supervisor-sshd.conf /etc/supervisor/conf.d/sshd.conf
+ADD supervisor-cron.conf /etc/supervisor/conf.d/cron.conf
+
+# nginx confs
+ADD nginx.conf /etc/nginx/nginx.conf
+ADD nginx-default /etc/nginx/sites-available/default
+
+# Startup tasks
 ADD clear-sockets /start.d/clear-sockets
 ADD gen-ssh /start.d/gen-ssh
 ADD start /start
 
-RUN chmod +x /start.d/clear-sockets
+RUN chmod +x /start.d/clear-sockets /start
+
+ENTRYPOINT ["/start"]
 
 EXPOSE 80
+EXPOSE 22

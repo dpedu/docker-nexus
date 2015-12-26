@@ -1,4 +1,7 @@
+#!/bin/sh
+
 # Regenerate ssh key per container
+
 dpkg-reconfigure openssh-server
 
 rm /start.d/gen-ssh
