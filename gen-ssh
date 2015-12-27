@@ -2,6 +2,12 @@
 
 # Regenerate ssh key per container
 
-dpkg-reconfigure openssh-server
+if [ ! -f "/etc/ssh/ssh_host_rsa_key" ]; then
+  # Regen keys
+  ssh-keygen -A
+
+  # Move keys to keys dir
+  mv /etc/ssh/ssh_host_* /etc/ssh/keys/
+fi
 
 rm /start.d/gen-ssh

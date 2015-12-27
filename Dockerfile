@@ -8,7 +8,11 @@ RUN useradd --create-home nexus && \
     apt-get install -y nginx-light fcgiwrap supervisor openssh-server cron && \
     mkdir /start.d /nexus /var/run/sshd && \
     chown nexus /nexus && \
-    cp /usr/share/doc/fcgiwrap/examples/nginx.conf /etc/nginx/fcgiwrap.conf
+    cp /usr/share/doc/fcgiwrap/examples/nginx.conf /etc/nginx/fcgiwrap.conf && \
+    rm /etc/ssh/ssh_host_* && \
+    mkdir /etc/ssh/keys && \
+    sed -i -E 's/HostKey \/etc\/ssh\//HostKey \/etc\/ssh\/keys\//' /etc/ssh/sshd_config && \
+    rm -rf /var/lib/apt/lists/*
 
 # Supervisor confs
 ADD supervisor.conf /etc/supervisor/conf.d/supervisor.conf
