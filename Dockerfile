@@ -5,7 +5,7 @@ MAINTAINER Dave P
 RUN useradd --create-home nexus && \
     echo "nexus:nexus" | chpasswd && \
     apt-get update && \
-    apt-get install -y nginx-light fcgiwrap supervisor openssh-server cron && \
+    apt-get install -y nginx-light fcgiwrap supervisor openssh-server cron rsync && \
     mkdir /start.d /nexus /var/run/sshd && \
     chown nexus /nexus && \
     cp /usr/share/doc/fcgiwrap/examples/nginx.conf /etc/nginx/fcgiwrap.conf && \
