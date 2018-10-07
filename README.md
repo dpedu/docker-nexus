@@ -1,10 +1,11 @@
 # docker-nexus
 
-**A nginx/cgi/sshd server for prototyping services or data hubs.**
+**A nginx + cgi + sshd server for prototyping services or data hubs.**
+
 
 ## Quick start
 
-* Clone: `git clone ssh://git@gitlab.xmopx.net:222/dave/docker-nexus.git`
+* Clone: `git clone ssh://git@git.davepedu.com:222/dave/docker-nexus.git`
 * Build: `cd docker-nexus ; docker build -t nexus .`
 * Run: `docker run nexus`
 
@@ -13,28 +14,47 @@
 
 Nexus offers a couple services:
 
+
 ### SSHD
 
 For shell related activities, an sshd daemon runs on the standard port. Username and password, by default, is `nexus`.
 
+Mount `/data/keys` to persist host keys.
+
+
 ### Nginx
 
-For accessing data or calling CGI scripts, nginx runs on the standard port. The document root is `/nexus/`.
+For accessing data or calling CGI scripts via nginx on port 80.
+
+The document root is `/data/data/`.
+
 
 ### CGI
 
-Standard CGI scripts can be placed in `/nexus/cgi-bin/`. Some sample scripts exist in `./examples/cgi-scripts/`.
+CGI scripts can be placed in `/data/scripts/`. Some sample scripts exist in `./examples/cgi-scripts/`.
+
+The library in `scripts/nexus/cgi.py` can be imported like:
+
+```
+>>> from nexus.cgi import *
+>>> start_response()
+Status: 200 OK
+Content-Type: text/html
+
+>>>
+```
+
 
 ### Cron
 
-Cron is present in the container.
+Cron is present in the container. Place tabs in `/etc/cron.d`.
+
 
 ## Protips
 
-* Drop executable scripts into `/startup.d/` for effortless startup tasks
-* Persistance? You want to mount these files/dirs outside the container:
-    * `/nexus/` - webroot and recommended data store
-    * `/etc/ssh/keys/` - sshd key file directory
+* Drop executable scripts into `/startup.d/` for startup tasks
+* Persistance - mount `/data/` somewhere persistent.
+
 
 ## TODO
 

@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# Make /data/ dirs
+
+mkdir -p /data/data
+mkdir -p /data/scripts

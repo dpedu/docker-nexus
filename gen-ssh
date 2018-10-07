@@ -7,7 +7,8 @@ if [ ! -f "/etc/ssh/keys/ssh_host_rsa_key" ]; then
   ssh-keygen -A
 
   # Move keys to keys dir
-  mv /etc/ssh/ssh_host_* /etc/ssh/keys/
+  mkdir -p /data/keys/
+  mv /etc/ssh/ssh_host_* /data/keys/
 fi
 
 rm /start.d/gen-ssh
