@@ -44,6 +44,3 @@ ENTRYPOINT ["/start"]
 
 EXPOSE 80
 EXPOSE 22
-
-
-RUN sed -i -E 's/error_log .+/error_log \/var\/log\/nginx\/error.log debug;/' /etc/nginx/nginx.conf

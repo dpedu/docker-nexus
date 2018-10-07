@@ -22,12 +22,11 @@ def start_response(content_type="text/html", status_code=("200", "OK",), extra_h
 def parse_qs():
     """
     Parse the request's query string into a dict
-    TODO parse arrays
     """
     GET = {}
     if "QUERY_STRING" in os.environ:
         GET = _parse_qs(os.environ["QUERY_STRING"])
-        GET = {k: v[0] for k, v in GET.items()}
+        GET = {k: v[0] if len(v) == 1 else v for k, v in GET.items()}
     return GET
 
 
