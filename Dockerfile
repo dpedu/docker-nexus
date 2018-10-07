@@ -1,12 +1,14 @@
 FROM ubuntu:bionic
 
-# Nexus user for application usage
-RUN useradd --create-home nexus && \
-    echo "nexus:nexus" | chpasswd
-
 # Packages
 RUN apt-get update && \
     apt-get install -y nginx-light fcgiwrap supervisor openssh-server cron rsync python3-pip
+
+# Nexus user for application usage
+RUN useradd --create-home nexus && \
+    echo "nexus:nexus" | chpasswd && \
+    install -d /home/nexus/.ssh -o nexus -g nexus -m 700 && \
+    ln -s /data/nexus_authorized_keys /home/nexus/.ssh/authorized_keys
 
 # Misc conf
 RUN mkdir /start.d /nexus /var/run/sshd && \

@@ -19,7 +19,8 @@ Nexus offers a couple services:
 
 For shell related activities, an sshd daemon runs on the standard port. Username and password, by default, is `nexus`.
 
-Mount `/data/keys` to persist host keys.
+Mount `/data/keys` to persist host keys. Ssh public keys in `/data/nexus_authorized_keys` will be authorized for the
+`nexus` user.
 
 
 ### Nginx
